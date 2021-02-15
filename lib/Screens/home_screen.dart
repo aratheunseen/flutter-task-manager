@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'add_task_screen.dart';
+import 'history_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -51,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(Icons.history),
                   iconSize: 25.0,
                   color: Colors.grey,
-                  onPressed: () => print("Navigate to History Screen")),
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => History()))),
             ),
             Container(
               margin: const EdgeInsets.all(6.0),
@@ -59,12 +61,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(Icons.add_circle_outline),
                   iconSize: 25.0,
                   color: Colors.grey,
-                  onPressed: () => print("Navigate to Add Screen")),
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AddTask()))),
             )
           ],
         ),
         body: ListView.builder(
-            itemCount: 10,
+            itemCount: 15,
             itemBuilder: (BuildContext context, int index) {
               if (index == 0) {
                 return Column(

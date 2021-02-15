@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class AddTask extends StatefulWidget {
+class History extends StatefulWidget {
   @override
-  _AddTaskState createState() => _AddTaskState();
+  _HistoryState createState() => _HistoryState();
 }
 
-class _AddTaskState extends State<AddTask> {
+class _HistoryState extends State<History> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +24,7 @@ class _AddTaskState extends State<AddTask> {
             ),
             SizedBox(height: 20.0,),
             Center(
-              child: Text("Add Task", style: TextStyle(
+              child: Text("History", style: TextStyle(
                 color: Colors.black,
                 fontSize: 30.0,
                 fontWeight: FontWeight.normal,

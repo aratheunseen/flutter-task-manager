@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onChanged: (value) {
                 print(value);
               },
-              activeColor: Colors.grey,
+              activeColor: Colors.redAccent,
               value: true,
             ),
           ),
@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: IconButton(
                   icon: Icon(Icons.history),
                   iconSize: 25.0,
-                  color: Colors.grey,
+                  color: Colors.redAccent,
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => History()))),
             ),
             Container(
@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: IconButton(
                   icon: Icon(Icons.add_circle_outline),
                   iconSize: 25.0,
-                  color: Colors.grey,
+                  color: Colors.redAccent,
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AddTask()))),
             )
           ],
@@ -84,8 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text(
                           'You have 16 pending task out of 35',
                           style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 14.0,
+                            color: Colors.grey,
+                            fontSize: 15.0,
                             fontWeight: FontWeight.normal,
                           ),
                         ),

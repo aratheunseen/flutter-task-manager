@@ -11,9 +11,13 @@ class _AddTaskState extends State<AddTask> {
   String _title = "";
   String _priority;
   DateTime _date = DateTime.now();
+  TimeOfDay _time = TimeOfDay.now();
+
   TextEditingController _dateController = TextEditingController();
+  TextEditingController _timeController = TextEditingController();
 
   final DateFormat _dateFormatter = DateFormat("MMM dd, yyyy");
+  final TimeOfDay _timeFormatter = TimeOfDay(hour: 7, minute: 15);
 
   final List<String> _priorities = ['Low', 'Medium', 'High'];
 
@@ -32,8 +36,21 @@ class _AddTaskState extends State<AddTask> {
     }
   }
 
-  _submit(){
-    if(_formKey.currentState.validate()) {
+  _handleTimePicker() async {
+    final TimeOfDay time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: 00, minute: 00),
+    );
+    if (time != null) {
+      setState(() {
+        _time = time;
+      });
+      _timeController.text = "${_time.format(context)}";
+    }
+  }
+
+  _submit() {
+    if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
       print("Added");
@@ -103,6 +120,21 @@ class _AddTaskState extends State<AddTask> {
                           onTap: _handleDatePicker,
                           decoration: InputDecoration(
                             labelText: 'Date',
+                            labelStyle: TextStyle(fontSize: 18.0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 18.0),
+                        child: TextFormField(
+                          controller: _timeController,
+                          style: TextStyle(fontSize: 18.0),
+                          onTap: _handleTimePicker,
+                          decoration: InputDecoration(
+                            labelText: 'Time',
                             labelStyle: TextStyle(fontSize: 18.0),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),

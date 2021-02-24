@@ -17,7 +17,6 @@ class _AddTaskState extends State<AddTask> {
   TextEditingController _timeController = TextEditingController();
 
   final DateFormat _dateFormatter = DateFormat("MMM dd, yyyy");
-  final TimeOfDay _timeFormatter = TimeOfDay(hour: 7, minute: 15);
 
   final List<String> _priorities = ['Low', 'Medium', 'High'];
 
@@ -52,7 +51,6 @@ class _AddTaskState extends State<AddTask> {
   _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-
       print("Added");
     }
   }
@@ -60,6 +58,35 @@ class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(250, 250, 250, 1),
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.redAccent,
+            ),
+            onPressed: () => Navigator.pop(context)),
+        title: Row(children: [
+          Text(
+            "Add Task",
+            style: const TextStyle(
+              color: Colors.redAccent,
+              fontSize: 20.0,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ]),
+        actions: [
+          IconButton(
+              icon: Icon(
+                Icons.info_outline,
+                color: Colors.redAccent,
+              ),
+              onPressed: () {}),
+        ],
+        centerTitle: false,
+        elevation: 0,
+      ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
@@ -68,28 +95,28 @@ class _AddTaskState extends State<AddTask> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    size: 30,
-                    color: Colors.redAccent,
-                  ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Center(
-                  child: Text(
-                    "Add Task",
-                    style: TextStyle(
-                      color: Colors.redAccent,
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 30.0),
+                // GestureDetector(
+                //   onTap: () => Navigator.pop(context),
+                //   child: Icon(
+                //     Icons.arrow_back_ios,
+                //     size: 30,
+                //     color: Colors.redAccent,
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: 20.0,
+                // ),
+                // Center(
+                //   child: Text(
+                //     "Add Task",
+                //     style: TextStyle(
+                //       color: Colors.redAccent,
+                //       fontSize: 30.0,
+                //       fontWeight: FontWeight.normal,
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(height: 30.0),
                 Form(
                   key: _formKey,
                   child: Column(

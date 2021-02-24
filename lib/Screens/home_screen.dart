@@ -34,18 +34,32 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text(
-            "Task Manager",
-            style: const TextStyle(
-              color: Colors.grey,
-              fontSize: 22.0,
-              fontWeight: FontWeight.normal,
-              letterSpacing: -1.2,
-            ),
+          backgroundColor: Color.fromRGBO(250, 250, 250, 1),
+          // leading: IconButton(icon: Icon(Icons.apps, color: Colors.black,), onPressed: null),
+          title: Row(
+            children: [
+              Text(
+                "Task Manager",
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.normal,
+                  letterSpacing: -1.2,
+                ),
+              ),
+              // Text(
+              //   "Manager",
+              //   style: const TextStyle(
+              //     color: Colors.redAccent,
+              //     fontSize: 20.0,
+              //     fontWeight: FontWeight.normal,
+              //     letterSpacing: 0,
+              //   ),
+              // )
+            ],
           ),
           centerTitle: false,
-          shadowColor: Colors.transparent,
+          elevation: 0,
           actions: [
             Container(
               margin: const EdgeInsets.all(0),
@@ -53,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(Icons.history),
                   iconSize: 25.0,
                   color: Colors.redAccent,
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => History()))),
+                  onPressed: () => Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => History()))),
             ),
             Container(
               margin: const EdgeInsets.all(6.0),
@@ -61,7 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(Icons.add_circle_outline),
                   iconSize: 25.0,
                   color: Colors.redAccent,
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AddTask()))),
+                  onPressed: () => Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => AddTask()))),
             )
           ],
         ),

@@ -20,6 +20,18 @@ class _AddTaskState extends State<AddTask> {
 
   final List<String> _priorities = ['Low', 'Medium', 'High'];
 
+  @override
+  void initState() {
+    super.initState();
+    _dateController.text = _dateFormatter.format(_date);
+  }
+
+  @override
+  void dispose() {
+    _dateController.dispose();
+    super.dispose();
+  }
+
   _handleDatePicker() async {
     final DateTime date = await (showDatePicker(
         context: context,

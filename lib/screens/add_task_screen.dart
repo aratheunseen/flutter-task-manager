@@ -1,28 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/helpers/database_helper.dart';
+import 'package:task_manager/models/task_model.dart';
 import 'package:intl/intl.dart';
 
-class AddTask extends StatefulWidget {
+class AddTaskScreen extends StatefulWidget {
+  final Function updateTaskList;
+  final Task task;
+
+  AddTaskScreen({this.updateTaskList, this.task});
+
   @override
-  _AddTaskState createState() => _AddTaskState();
+  _AddTaskScreenState createState() => _AddTaskScreenState();
 }
 
-class _AddTaskState extends State<AddTask> {
+class _AddTaskScreenState extends State<AddTaskScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _title = "";
+  String _title = '';
   String _priority;
   DateTime _date = DateTime.now();
-  TimeOfDay _time = TimeOfDay.now();
-
   TextEditingController _dateController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
 
-  final DateFormat _dateFormatter = DateFormat("MMM dd, yyyy");
-
+  final DateFormat _dateFormatter = DateFormat('MMM dd, yyyy');
   final List<String> _priorities = ['Low', 'Medium', 'High'];
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.task != null) {
+      _title = widget.task.title;
+      _date = widget.task.date;
+      _priority = widget.task.priority;
+    }
+
     _dateController.text = _dateFormatter.format(_date);
   }
 
@@ -33,12 +43,12 @@ class _AddTaskState extends State<AddTask> {
   }
 
   _handleDatePicker() async {
-    final DateTime date = await (showDatePicker(
-        context: context,
-        initialDate: _date,
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100)));
-
+    final DateTime date = await showDatePicker(
+      context: context,
+      initialDate: _date,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
     if (date != null && date != _date) {
       setState(() {
         _date = date;
@@ -47,23 +57,30 @@ class _AddTaskState extends State<AddTask> {
     }
   }
 
-  _handleTimePicker() async {
-    final TimeOfDay time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: 00, minute: 00),
-    );
-    if (time != null) {
-      setState(() {
-        _time = time;
-      });
-      _timeController.text = "${_time.format(context)}";
-    }
+  _delete() {
+    DatabaseHelper.instance.deleteTask(widget.task.id);
+    widget.updateTaskList();
+    Navigator.pop(context);
   }
 
   _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print("Added");
+      print('$_title, $_date, $_priority');
+
+      Task task = Task(title: _title, date: _date, priority: _priority);
+      if (widget.task == null) {
+        // Insert the task to our user's database
+        task.status = 0;
+        DatabaseHelper.instance.insertTask(task);
+      } else {
+        // Update the task
+        task.id = widget.task.id;
+        task.status = widget.task.status;
+        DatabaseHelper.instance.updateTask(task);
+      }
+      widget.updateTaskList();
+      Navigator.pop(context);
     }
   }
 
@@ -75,14 +92,14 @@ class _AddTaskState extends State<AddTask> {
         leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Colors.redAccent,
+              color: Theme.of(context).primaryColor,
             ),
             onPressed: () => Navigator.pop(context)),
         title: Row(children: [
           Text(
-            "Add Task",
+            widget.task == null ? 'Add Task' : 'Update Task',
             style: const TextStyle(
-              color: Colors.redAccent,
+              color: Colors.blueAccent,
               fontSize: 20.0,
               fontWeight: FontWeight.normal,
             ),
@@ -92,7 +109,7 @@ class _AddTaskState extends State<AddTask> {
           IconButton(
               icon: Icon(
                 Icons.info_outline,
-                color: Colors.redAccent,
+                color: Theme.of(context).primaryColor,
               ),
               onPressed: () {}),
         ],
@@ -103,38 +120,16 @@ class _AddTaskState extends State<AddTask> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 50.0),
+            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 40.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // GestureDetector(
-                //   onTap: () => Navigator.pop(context),
-                //   child: Icon(
-                //     Icons.arrow_back_ios,
-                //     size: 30,
-                //     color: Colors.redAccent,
-                //   ),
-                // ),
-                // SizedBox(
-                //   height: 20.0,
-                // ),
-                // Center(
-                //   child: Text(
-                //     "Add Task",
-                //     style: TextStyle(
-                //       color: Colors.redAccent,
-                //       fontSize: 30.0,
-                //       fontWeight: FontWeight.normal,
-                //     ),
-                //   ),
-                // ),
-                // SizedBox(height: 30.0),
                 Form(
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 18.0),
+                        padding: EdgeInsets.symmetric(vertical: 20.0),
                         child: TextFormField(
                           style: TextStyle(fontSize: 18.0),
                           decoration: InputDecoration(
@@ -152,8 +147,9 @@ class _AddTaskState extends State<AddTask> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 18.0),
+                        padding: EdgeInsets.symmetric(vertical: 20.0),
                         child: TextFormField(
+                          readOnly: true,
                           controller: _dateController,
                           style: TextStyle(fontSize: 18.0),
                           onTap: _handleDatePicker,
@@ -167,34 +163,21 @@ class _AddTaskState extends State<AddTask> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 18.0),
-                        child: TextFormField(
-                          controller: _timeController,
-                          style: TextStyle(fontSize: 18.0),
-                          onTap: _handleTimePicker,
-                          decoration: InputDecoration(
-                            labelText: 'Time',
-                            labelStyle: TextStyle(fontSize: 18.0),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 18.0),
+                        padding: EdgeInsets.symmetric(vertical: 20.0),
                         child: DropdownButtonFormField(
                           isDense: true,
                           icon: Icon(Icons.arrow_drop_down_circle),
                           iconSize: 22.0,
-                          iconEnabledColor: Colors.red,
+                          iconEnabledColor: Theme.of(context).primaryColor,
                           items: _priorities.map((String priority) {
                             return DropdownMenuItem(
                               value: priority,
                               child: Text(
                                 priority,
                                 style: TextStyle(
-                                    color: Colors.black, fontSize: 18.0),
+                                  color: Colors.black,
+                                  fontSize: 18.0,
+                                ),
                               ),
                             );
                           }).toList(),
@@ -206,10 +189,9 @@ class _AddTaskState extends State<AddTask> {
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
-                          validator: (input) => input.trim().isEmpty
-                              ? 'Please select your task priority'
+                          validator: (input) => _priority == null
+                              ? 'Please select a priority level'
                               : null,
-                          onSaved: (input) => _priority = input,
                           onChanged: (value) {
                             setState(() {
                               _priority = value;
@@ -223,12 +205,12 @@ class _AddTaskState extends State<AddTask> {
                         height: 60.0,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: Colors.redAccent,
+                          color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(30.0),
                         ),
                         child: FlatButton(
                           child: Text(
-                            "Add",
+                            widget.task == null ? 'Add' : 'Update',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
@@ -237,6 +219,27 @@ class _AddTaskState extends State<AddTask> {
                           onPressed: _submit,
                         ),
                       ),
+                      widget.task != null
+                          ? Container(
+                              margin: EdgeInsets.symmetric(vertical: 0.0),
+                              height: 60.0,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              child: FlatButton(
+                                child: Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                                onPressed: _delete,
+                              ),
+                            )
+                          : SizedBox.shrink(),
                     ],
                   ),
                 ),

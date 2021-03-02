@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'add_task_screen.dart';
+import 'package:task_manager/helpers/database_helper.dart';
+import 'package:task_manager/models/task_model.dart';
 import 'history_screen.dart';
+import 'package:task_manager/screens/add_task_screen.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -8,23 +11,65 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Widget _buildTask(int index) {
+  Future<List<Task>> _taskList;
+  final DateFormat _dateFormatter = DateFormat('MMM dd, yyyy');
+
+  @override
+  void initState() {
+    super.initState();
+    _updateTaskList();
+  }
+
+  _updateTaskList() {
+    setState(() {
+      _taskList = DatabaseHelper.instance.getTaskList();
+    });
+  }
+
+  Widget _buildTask(Task task) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      padding: EdgeInsets.symmetric(horizontal: 25.0),
       child: Column(
         children: <Widget>[
-          Divider(),
           ListTile(
-            title: Text("Demo Task Title"),
-            subtitle: Text("Feb 28, 2021 - 12:00PM • High"),
+            title: Text(
+              task.title,
+              style: TextStyle(
+                fontSize: 18.0,
+                decoration: task.status == 0
+                    ? TextDecoration.none
+                    : TextDecoration.lineThrough,
+              ),
+            ),
+            subtitle: Text(
+              '${_dateFormatter.format(task.date)} • ${task.priority}',
+              style: TextStyle(
+                fontSize: 15.0,
+                decoration: task.status == 0
+                    ? TextDecoration.none
+                    : TextDecoration.lineThrough,
+              ),
+            ),
             trailing: Checkbox(
               onChanged: (value) {
-                print(value);
+                task.status = value ? 1 : 0;
+                DatabaseHelper.instance.updateTask(task);
+                _updateTaskList();
               },
-              activeColor: Colors.redAccent,
-              value: true,
+              activeColor: Theme.of(context).primaryColor,
+              value: task.status == 1 ? true : false,
+            ),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => AddTaskScreen(
+                  updateTaskList: _updateTaskList,
+                  task: task,
+                ),
+              ),
             ),
           ),
+          Divider(),
         ],
       ),
     );
@@ -33,84 +78,119 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromRGBO(250, 250, 250, 1),
-          // leading: IconButton(icon: Icon(Icons.apps, color: Colors.black,), onPressed: null),
-          title: Row(
-            children: [
-              Text(
-                "Task Manager",
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.normal,
-                  letterSpacing: -1.2,
-                ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.white,
+      //   foregroundColor: Theme.of(context).primaryColor,
+      //   child: Icon(Icons.add_outlined),
+      //   onPressed: () => Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (_) => AddTaskScreen(
+      //         updateTaskList: _updateTaskList,
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(250, 250, 250, 1),
+        // leading: IconButton(icon: Icon(Icons.apps, color: Colors.black,), onPressed: null),
+        title: Row(
+          children: [
+            Text(
+              "Task Manager",
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 20.0,
+                fontWeight: FontWeight.normal,
+                letterSpacing: -1.2,
               ),
-              // Text(
-              //   "Manager",
-              //   style: const TextStyle(
-              //     color: Colors.redAccent,
-              //     fontSize: 20.0,
-              //     fontWeight: FontWeight.normal,
-              //     letterSpacing: 0,
-              //   ),
-              // )
-            ],
-          ),
-          centerTitle: false,
-          elevation: 0,
-          actions: [
-            Container(
-              margin: const EdgeInsets.all(0),
-              child: IconButton(
-                  icon: Icon(Icons.history),
-                  iconSize: 25.0,
-                  color: Colors.redAccent,
-                  onPressed: () => Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => History()))),
             ),
-            Container(
-              margin: const EdgeInsets.all(6.0),
-              child: IconButton(
-                  icon: Icon(Icons.add_circle_outline),
-                  iconSize: 25.0,
-                  color: Colors.redAccent,
-                  onPressed: () => Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => AddTask()))),
-            )
+            // Text(
+            //   "Manager",
+            //   style: const TextStyle(
+            //     color: Colors.redAccent,
+            //     fontSize: 20.0,
+            //     fontWeight: FontWeight.normal,
+            //     letterSpacing: 0,
+            //   ),
+            // )
           ],
         ),
-        body: ListView.builder(
-            itemCount: 15,
+        centerTitle: false,
+        elevation: 0,
+        actions: [
+          Container(
+            margin: const EdgeInsets.all(0),
+            child: IconButton(
+                icon: Icon(Icons.history_outlined),
+                iconSize: 25.0,
+                color: Theme.of(context).primaryColor,
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => HistoryScreen()))),
+          ),
+          Container(
+            margin: const EdgeInsets.all(6.0),
+            child: IconButton(
+                icon: Icon(Icons.add_circle_outline),
+                iconSize: 25.0,
+                color: Theme.of(context).primaryColor,
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => AddTaskScreen()))),
+          )
+        ],
+      ),
+      body: FutureBuilder(
+        future: _taskList,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          final int completedTaskCount = snapshot.data
+              .where((Task task) => task.status == 0)
+              .toList()
+              .length;
+
+          return ListView.builder(
+            padding: EdgeInsets.symmetric(vertical: 0.0),
+            itemCount: 1 + snapshot.data.length,
             itemBuilder: (BuildContext context, int index) {
               if (index == 0) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: Color.fromRGBO(240, 240, 240, 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'You have 16 pending task out of 35',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.normal,
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: new BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          color: Color.fromRGBO(240, 240, 240, 1.0),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'You have [ $completedTaskCount ] pending task out of [ ${snapshot.data.length} ]',
+                            style: TextStyle(
+                              color: Colors.redAccent,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 );
               }
-              return _buildTask(index);
-            }));
+              return _buildTask(snapshot.data[index - 1]);
+            },
+          );
+        },
+      ),
+    );
   }
 }

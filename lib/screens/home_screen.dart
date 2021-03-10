@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/helpers/database_helper.dart';
 import 'package:task_manager/models/task_model.dart';
@@ -18,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _updateTaskList();
+    RefreshIndicatorMode.refresh;
   }
 
   _updateTaskList() {
@@ -31,45 +33,46 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: EdgeInsets.symmetric(horizontal: 25.0),
       child: Column(
         children: <Widget>[
-          ListTile(
-            title: Text(
-              task.title,
-              style: TextStyle(
-                fontSize: 18.0,
-                decoration: task.status == 0
-                    ? TextDecoration.none
-                    : TextDecoration.lineThrough,
+          if (task.status == 0)
+            ListTile(
+              title: Text(
+                task.title,
+                style: TextStyle(
+                  fontSize: 18.0,
+                  decoration: task.status == 0
+                      ? TextDecoration.none
+                      : TextDecoration.lineThrough,
+                ),
               ),
-            ),
-            subtitle: Text(
-              '${_dateFormatter.format(task.date)} • ${task.priority}',
-              style: TextStyle(
-                fontSize: 15.0,
-                decoration: task.status == 0
-                    ? TextDecoration.none
-                    : TextDecoration.lineThrough,
+              subtitle: Text(
+                '${_dateFormatter.format(task.date)} • ${task.priority}',
+                style: TextStyle(
+                  fontSize: 15.0,
+                  decoration: task.status == 0
+                      ? TextDecoration.none
+                      : TextDecoration.lineThrough,
+                ),
               ),
-            ),
-            trailing: Checkbox(
-              onChanged: (value) {
-                task.status = value ? 1 : 0;
-                DatabaseHelper.instance.updateTask(task);
-                _updateTaskList();
-              },
-              activeColor: Theme.of(context).primaryColor,
-              value: task.status == 1 ? true : false,
-            ),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => AddTaskScreen(
-                  updateTaskList: _updateTaskList,
-                  task: task,
+              trailing: Checkbox(
+                onChanged: (value) {
+                  task.status = value ? 1 : 0;
+                  DatabaseHelper.instance.updateTask(task);
+                  _updateTaskList();
+                },
+                activeColor: Theme.of(context).primaryColor,
+                value: task.status == 1 ? true : false,
+              ),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AddTaskScreen(
+                    updateTaskList: _updateTaskList,
+                    task: task,
+                  ),
                 ),
               ),
             ),
-          ),
-          Divider(),
+          //Divider(),
         ],
       ),
     );
@@ -78,26 +81,31 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: Colors.white,
-      //   foregroundColor: Theme.of(context).primaryColor,
-      //   child: Icon(Icons.add_outlined),
-      //   onPressed: () => Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (_) => AddTaskScreen(
-      //         updateTaskList: _updateTaskList,
-      //       ),
-      //     ),
-      //   ),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        child: Icon(Icons.add_outlined),
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => AddTaskScreen(
+              updateTaskList: _updateTaskList,
+            ),
+          ),
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(250, 250, 250, 1),
-        // leading: IconButton(icon: Icon(Icons.apps, color: Colors.black,), onPressed: null),
+        leading: IconButton(
+            icon: Icon(
+              Icons.apps,
+              color: Colors.black,
+            ),
+            onPressed: null),
         title: Row(
           children: [
             Text(
-              "Task Manager",
+              "Task",
               style: const TextStyle(
                 color: Colors.grey,
                 fontSize: 20.0,
@@ -105,15 +113,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 letterSpacing: -1.2,
               ),
             ),
-            // Text(
-            //   "Manager",
-            //   style: const TextStyle(
-            //     color: Colors.redAccent,
-            //     fontSize: 20.0,
-            //     fontWeight: FontWeight.normal,
-            //     letterSpacing: 0,
-            //   ),
-            // )
+            Text(
+              "Manager",
+              style: const TextStyle(
+                color: Colors.redAccent,
+                fontSize: 20.0,
+                fontWeight: FontWeight.normal,
+                letterSpacing: 0,
+              ),
+            )
           ],
         ),
         centerTitle: false,
@@ -124,16 +132,16 @@ class _HomeScreenState extends State<HomeScreen> {
             child: IconButton(
                 icon: Icon(Icons.history_outlined),
                 iconSize: 25.0,
-                color: Theme.of(context).primaryColor,
+                color: Colors.black,
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => HistoryScreen()))),
           ),
           Container(
             margin: const EdgeInsets.all(6.0),
             child: IconButton(
-                icon: Icon(Icons.add_circle_outline),
+                icon: Icon(Icons.settings_outlined),
                 iconSize: 25.0,
-                color: Theme.of(context).primaryColor,
+                color: Colors.black,
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => AddTaskScreen()))),
           )
@@ -175,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Text(
                             'You have [ $completedTaskCount ] pending task out of [ ${snapshot.data.length} ]',
                             style: TextStyle(
-                              color: Colors.redAccent,
+                              color: Colors.blueGrey,
                               fontSize: 15.0,
                               fontWeight: FontWeight.normal,
                             ),

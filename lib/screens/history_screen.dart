@@ -4,6 +4,8 @@ import 'package:task_manager/models/task_model.dart';
 import 'package:task_manager/screens/add_task_screen.dart';
 import 'package:intl/intl.dart';
 
+import 'home_screen.dart';
+
 class HistoryScreen extends StatefulWidget {
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
@@ -30,47 +32,48 @@ class _HistoryScreenState extends State<HistoryScreen> {
       padding: EdgeInsets.symmetric(horizontal: 25.0),
       child: Column(
         children: <Widget>[
-          ListTile(
-            title: Text(
-              task.title,
-              style: TextStyle(
-                fontSize: 18.0,
-                decoration: task.status == 0
-                    ? TextDecoration.none
-                    : TextDecoration.lineThrough,
+          if (task.status == 1)
+            ListTile(
+              title: Text(
+                task.title,
+                style: TextStyle(
+                  fontSize: 18.0,
+                  decoration: task.status == 1
+                      ? TextDecoration.none
+                      : TextDecoration.lineThrough,
+                ),
               ),
-            ),
-            subtitle: Text(
-              '${_dateFormatter.format(task.date)} - null • ${task.priority}',
-              style: TextStyle(
-                fontSize: 15.0,
-                decoration: task.status == 0
-                    ? TextDecoration.none
-                    : TextDecoration.lineThrough,
+              subtitle: Text(
+                '${_dateFormatter.format(task.date)} • ${task.priority}',
+                style: TextStyle(
+                  fontSize: 15.0,
+                  decoration: task.status == 1
+                      ? TextDecoration.none
+                      : TextDecoration.lineThrough,
+                ),
               ),
-            ),
-            trailing: IconButton(
-              icon: Icon(
-                Icons.restore_from_trash,
-                color: Theme.of(context).primaryColor,
+              trailing: IconButton(
+                icon: Icon(
+                  Icons.restore_from_trash,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () {
+                  task.status = 0;
+                  DatabaseHelper.instance.updateTask(task);
+                  _updateTaskList();
+                },
               ),
-              onPressed: () {
-                task.status = 0;
-                DatabaseHelper.instance.updateTask(task);
-                _updateTaskList();
-              },
-            ),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => AddTaskScreen(
-                  updateTaskList: _updateTaskList,
-                  task: task,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AddTaskScreen(
+                    updateTaskList: _updateTaskList,
+                    task: task,
+                  ),
                 ),
               ),
             ),
-          ),
-          Divider(),
+          // Divider(),
         ],
       ),
     );
@@ -84,14 +87,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
         leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Theme.of(context).primaryColor,
+              color: Colors.black,
             ),
-            onPressed: () => Navigator.pop(context)),
+            onPressed: () => Navigator.push(
+                context, MaterialPageRoute(builder: (_) => HomeScreen()))),
         title: Row(children: [
           Text(
             'History',
             style: const TextStyle(
-              color: Colors.blueAccent,
+              color: Colors.redAccent,
               fontSize: 20.0,
               fontWeight: FontWeight.normal,
             ),
@@ -101,7 +105,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           IconButton(
               icon: Icon(
                 Icons.info_outline,
-                color: Theme.of(context).primaryColor,
+                color: Colors.black,
               ),
               onPressed: () {}),
         ],
@@ -144,7 +148,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           child: Text(
                             'You have completed [ $completedTaskCount ] tasks',
                             style: TextStyle(
-                              color: Colors.redAccent,
+                              color: Colors.blueGrey,
                               fontSize: 15.0,
                               fontWeight: FontWeight.normal,
                             ),

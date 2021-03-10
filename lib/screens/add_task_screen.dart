@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/helpers/database_helper.dart';
 import 'package:task_manager/models/task_model.dart';
+import 'home_screen.dart';
 import 'package:intl/intl.dart';
+
+import 'home_screen.dart';
 
 class AddTaskScreen extends StatefulWidget {
   final Function updateTaskList;
@@ -59,8 +62,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   _delete() {
     DatabaseHelper.instance.deleteTask(widget.task.id);
-    widget.updateTaskList();
     Navigator.pop(context);
+    widget.updateTaskList();
   }
 
   _submit() {
@@ -79,8 +82,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         task.status = widget.task.status;
         DatabaseHelper.instance.updateTask(task);
       }
+      Navigator.push(context, MaterialPageRoute(builder: (_) => HomeScreen()));
       widget.updateTaskList();
-      Navigator.pop(context);
     }
   }
 
@@ -92,14 +95,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Theme.of(context).primaryColor,
+              color: Colors.black,
             ),
             onPressed: () => Navigator.pop(context)),
         title: Row(children: [
           Text(
             widget.task == null ? 'Add Task' : 'Update Task',
             style: const TextStyle(
-              color: Colors.blueAccent,
+              color: Colors.redAccent,
               fontSize: 20.0,
               fontWeight: FontWeight.normal,
             ),
@@ -109,7 +112,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           IconButton(
               icon: Icon(
                 Icons.info_outline,
-                color: Theme.of(context).primaryColor,
+                color: Colors.black,
               ),
               onPressed: () {}),
         ],

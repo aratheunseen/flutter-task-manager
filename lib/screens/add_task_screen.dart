@@ -3,6 +3,7 @@ import 'package:task_manager/helpers/database_helper.dart';
 import 'package:task_manager/models/task_model.dart';
 import 'home_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:toast/toast.dart';
 
 class AddTaskScreen extends StatefulWidget {
   final Function updateTaskList;
@@ -19,11 +20,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   String _title = '';
   String _priority;
   DateTime _date = DateTime.now();
-
-  // TimeOfDay _time = TimeOfDay.now();
   TextEditingController _dateController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
-
   final DateFormat _dateFormatter = DateFormat('MMM dd, yyyy');
 
   final List<String> _priorities = ['Low', 'Medium', 'High'];
@@ -44,7 +41,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   void dispose() {
     _dateController.dispose();
-    _timeController.dispose();
     super.dispose();
   }
 
@@ -63,12 +59,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     }
   }
 
-  _handleTimePicker() async {}
-
   _delete() {
     DatabaseHelper.instance.deleteTask(widget.task.id);
     Navigator.pop(context);
     widget.updateTaskList();
+    Toast.show("Task Deleted", context,
+        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
   }
 
   _submit() {
@@ -81,11 +77,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         // Insert the task to our user's database
         task.status = 0;
         DatabaseHelper.instance.insertTask(task);
+        Toast.show("New Task Added", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       } else {
         // Update the task
         task.id = widget.task.id;
         task.status = widget.task.status;
         DatabaseHelper.instance.updateTask(task);
+        Toast.show("Task Updated", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       }
       Navigator.push(context, MaterialPageRoute(builder: (_) => HomeScreen()));
       widget.updateTaskList();
@@ -163,22 +163,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           onTap: _handleDatePicker,
                           decoration: InputDecoration(
                             labelText: 'Date',
-                            labelStyle: TextStyle(fontSize: 18.0),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20.0),
-                        child: TextFormField(
-                          readOnly: true,
-                          controller: _timeController,
-                          style: TextStyle(fontSize: 18.0),
-                          onTap: _handleTimePicker,
-                          decoration: InputDecoration(
-                            labelText: 'Time',
                             labelStyle: TextStyle(fontSize: 18.0),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),

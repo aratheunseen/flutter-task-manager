@@ -5,6 +5,8 @@ import 'package:task_manager/models/task_model.dart';
 import 'history_screen.dart';
 import 'package:task_manager/screens/add_task_screen.dart';
 import 'package:intl/intl.dart';
+import 'settings_screen.dart';
+import 'package:toast/toast.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -56,6 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 onChanged: (value) {
                   task.status = value ? 1 : 0;
                   DatabaseHelper.instance.updateTask(task);
+                  Toast.show("Task Completed", context,
+                      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                   _updateTaskList();
                 },
                 activeColor: Theme.of(context).primaryColor,
@@ -141,8 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(Icons.settings_outlined),
                 iconSize: 25.0,
                 color: Colors.black,
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => AddTaskScreen()))),
+                onPressed: () => Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => Settings()))),
           )
         ],
       ),

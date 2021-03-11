@@ -3,6 +3,7 @@ import 'package:task_manager/helpers/database_helper.dart';
 import 'package:task_manager/models/task_model.dart';
 import 'package:task_manager/screens/add_task_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:toast/toast.dart';
 
 import 'home_screen.dart';
 
@@ -60,6 +61,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 onPressed: () {
                   task.status = 0;
                   DatabaseHelper.instance.updateTask(task);
+                  Toast.show("Task reassigned", context,
+                      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                   _updateTaskList();
                 },
               ),

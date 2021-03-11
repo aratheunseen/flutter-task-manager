@@ -19,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _updateTaskList();
-    RefreshIndicatorMode.refresh;
   }
 
   _updateTaskList() {

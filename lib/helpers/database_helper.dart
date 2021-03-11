@@ -20,8 +20,8 @@ class DatabaseHelper {
   // Task Tables
   // Id | Title | Date | Priority | Status
   // 0     ''      ''      ''         0
+  // 1     ''      ''      ''         0
   // 2     ''      ''      ''         0
-  // 3     ''      ''      ''         0
 
   Future<Database> get db async {
     if (_db == null) {

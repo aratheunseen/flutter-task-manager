@@ -4,8 +4,6 @@ import 'package:task_manager/models/task_model.dart';
 import 'home_screen.dart';
 import 'package:intl/intl.dart';
 
-import 'home_screen.dart';
-
 class AddTaskScreen extends StatefulWidget {
   final Function updateTaskList;
   final Task task;
@@ -21,9 +19,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   String _title = '';
   String _priority;
   DateTime _date = DateTime.now();
+
+  // TimeOfDay _time = TimeOfDay.now();
   TextEditingController _dateController = TextEditingController();
+  TextEditingController _timeController = TextEditingController();
 
   final DateFormat _dateFormatter = DateFormat('MMM dd, yyyy');
+
   final List<String> _priorities = ['Low', 'Medium', 'High'];
 
   @override
@@ -42,6 +44,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   void dispose() {
     _dateController.dispose();
+    _timeController.dispose();
     super.dispose();
   }
 
@@ -59,6 +62,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       _dateController.text = _dateFormatter.format(date);
     }
   }
+
+  _handleTimePicker() async {}
 
   _delete() {
     DatabaseHelper.instance.deleteTask(widget.task.id);
@@ -158,6 +163,22 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           onTap: _handleDatePicker,
                           decoration: InputDecoration(
                             labelText: 'Date',
+                            labelStyle: TextStyle(fontSize: 18.0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.0),
+                        child: TextFormField(
+                          readOnly: true,
+                          controller: _timeController,
+                          style: TextStyle(fontSize: 18.0),
+                          onTap: _handleTimePicker,
+                          decoration: InputDecoration(
+                            labelText: 'Time',
                             labelStyle: TextStyle(fontSize: 18.0),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),

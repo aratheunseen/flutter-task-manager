@@ -113,14 +113,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             ),
           ),
         ]),
-        actions: [
-          IconButton(
-              icon: Icon(
-                Icons.info_outline,
-                color: Colors.black,
-              ),
-              onPressed: () {}),
-        ],
+        // actions: [
+        //   IconButton(
+        //       icon: Icon(
+        //         Icons.info_outline,
+        //         color: Colors.black,
+        //       ),
+        //       onPressed: () {}),
+        // ],
         centerTitle: false,
         elevation: 0,
       ),

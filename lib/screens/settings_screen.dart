@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
-import 'package:toast/toast.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -41,6 +40,7 @@ class _SettingsState extends State<Settings> {
         centerTitle: false,
         elevation: 0,
       ),
+      body: Container(),
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
+import 'stacked_icons.dart';
+import 'package:toast/toast.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -40,7 +42,121 @@ class _SettingsState extends State<Settings> {
         centerTitle: false,
         elevation: 0,
       ),
-      body: Container(),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(25.0, 60.0, 25.0, 25.0),
+        child: Container(
+          width: double.infinity,
+          child: new Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              new StakedIcons(),
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: new Text(
+                      "Task Manager",
+                      style: new TextStyle(fontSize: 20.0, color: Colors.grey),
+                    ),
+                  )
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 5.0, left: 25.0, right: 20.0, bottom: 60.0),
+                child: new Container(
+                    alignment: Alignment.center,
+                    child: new Text("Version: 1.0",
+                        style:
+                            new TextStyle(fontSize: 12.0, color: Colors.grey))),
+              ),
+              SizedBox(
+                width: 1080,
+                height: 1,
+                child: const DecoratedBox(
+                  decoration: const BoxDecoration(color: Colors.black12),
+                ),
+              ),
+              new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 30.0, left: 40.0, right: 20.0, bottom: 30.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => HomeScreen()));
+                            Toast.show("All data cleared", context,
+                                duration: Toast.LENGTH_LONG,
+                                gravity: Toast.BOTTOM);
+                          },
+                          child: new Container(
+                              alignment: Alignment.center,
+                              height: 40.0,
+                              decoration: new BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: new BorderRadius.circular(9.0)),
+                              child: new Text("CLEAR ALL DATA",
+                                  style: new TextStyle(
+                                      fontSize: 15.0, color: Colors.white))),
+                        ),
+                      ),
+                    ),
+                  ]),
+              SizedBox(
+                width: 1080,
+                height: 1,
+                child: const DecoratedBox(
+                  decoration: const BoxDecoration(color: Colors.black12),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 40.0, right: 20.0),
+                child: new Container(
+                    alignment: Alignment.centerLeft,
+                    height: 60.0,
+                    child: new Text("Terms and Condition",
+                        style: new TextStyle(
+                            fontSize: 17.0, color: Colors.brown))),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 40.0, right: 20.0),
+                child: new Container(
+                    alignment: Alignment.centerLeft,
+                    height: 60.0,
+                    child: new Text("Privacy Policy",
+                        style: new TextStyle(
+                            fontSize: 17.0, color: Colors.brown))),
+              ),
+              SizedBox(
+                width: 1080,
+                height: 1,
+                child: const DecoratedBox(
+                  decoration: const BoxDecoration(color: Colors.black12),
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: new Text("Bornomala Technologies ",
+                          style: new TextStyle(
+                              fontSize: 15.0, color: Colors.black54)),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

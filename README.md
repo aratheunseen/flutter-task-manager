@@ -1,4 +1,4 @@
-# daiy-task-manager
+# daily-task-manager
 
 This is an applicaton for manage your daily tasks.
 

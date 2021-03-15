@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/helpers/database_helper.dart';
 import 'home_screen.dart';
 import 'stacked_icons.dart';
 import 'package:toast/toast.dart';
@@ -87,6 +88,7 @@ class _SettingsState extends State<Settings> {
                             top: 30.0, left: 40.0, right: 20.0, bottom: 30.0),
                         child: GestureDetector(
                           onTap: () {
+                            DatabaseHelper.instance.deleteAllTask();
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

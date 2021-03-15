@@ -86,4 +86,10 @@ class DatabaseHelper {
     );
     return result;
   }
+
+  Future<int> deleteAllTask() async {
+    Database db = await this.db;
+    final int result = await db.delete(tasksTable);
+    return result;
+  }
 }

@@ -3,6 +3,7 @@ import 'package:task_manager/helpers/database_helper.dart';
 import 'home_screen.dart';
 import 'stacked_icons.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -120,20 +121,38 @@ class _SettingsState extends State<Settings> {
               Padding(
                 padding: const EdgeInsets.only(left: 40.0, right: 20.0),
                 child: new Container(
-                    alignment: Alignment.centerLeft,
-                    height: 60.0,
-                    child: new Text("Terms and Condition",
-                        style: new TextStyle(
-                            fontSize: 17.0, color: Colors.brown))),
+                  alignment: Alignment.centerLeft,
+                  height: 60.0,
+                  child: InkWell(
+                    child: new Text(
+                      "Terms and Condition",
+                      style: new TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.brown,
+                          backgroundColor: Colors.transparent),
+                    ),
+                    onTap: () =>
+                        launch('https://https://bornomala-tech.web.app/terms'),
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 40.0, right: 20.0),
                 child: new Container(
-                    alignment: Alignment.centerLeft,
-                    height: 60.0,
-                    child: new Text("Privacy Policy",
-                        style: new TextStyle(
-                            fontSize: 17.0, color: Colors.brown))),
+                  alignment: Alignment.centerLeft,
+                  height: 60.0,
+                  child: InkWell(
+                    child: new Text(
+                      "Privacy Policy",
+                      style: new TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.brown,
+                          backgroundColor: Colors.transparent),
+                    ),
+                    onTap: () => launch(
+                        'https://https://bornomala-tech.web.app/privacy'),
+                  ),
+                ),
               ),
               SizedBox(
                 width: 1080,

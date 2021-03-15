@@ -2,7 +2,7 @@
 
 This is an applicaton for manage your daily tasks.
 
-![daily-task-manager](https://user-images.githubusercontent.com/62181222/111063230-9c4c1900-84d7-11eb-9523-d8c552ee3f56.jpg)
+![daily-task-manager](https://user-images.githubusercontent.com/62181222/111222593-3f02b580-8606-11eb-89e1-c5c518f5ad96.jpg)
 
 A few resources to get you started if this is your first Flutter project:
 

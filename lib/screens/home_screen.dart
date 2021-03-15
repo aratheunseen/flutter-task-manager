@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:task_manager/helpers/database_helper.dart';
 import 'package:task_manager/models/task_model.dart';
 import 'history_screen.dart';
@@ -27,6 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _taskList = DatabaseHelper.instance.getTaskList();
     });
+  }
+
+  Future<bool> onBackPressed() {
+    return SystemNavigator.pop();
   }
 
   Widget _buildTask(Task task) {
@@ -83,124 +88,130 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        child: Icon(Icons.add_outlined),
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => AddTaskScreen(
-              updateTaskList: _updateTaskList,
+    return WillPopScope(
+      onWillPop: onBackPressed,
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          child: Icon(Icons.add_outlined),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AddTaskScreen(
+                updateTaskList: _updateTaskList,
+              ),
             ),
           ),
         ),
-      ),
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(250, 250, 250, 1),
-        leading: IconButton(
-            icon: Icon(
-              Icons.apps,
-              color: Colors.black,
-            ),
-            onPressed: null),
-        title: Row(
-          children: [
-            Text(
-              "Task",
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 20.0,
-                fontWeight: FontWeight.normal,
-                letterSpacing: -1.2,
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(250, 250, 250, 1),
+          leading: IconButton(
+              icon: Icon(
+                Icons.apps,
+                color: Colors.black,
               ),
-            ),
-            Text(
-              "Manager",
-              style: const TextStyle(
-                color: Colors.redAccent,
-                fontSize: 20.0,
-                fontWeight: FontWeight.normal,
-                letterSpacing: 0,
+              onPressed: null),
+          title: Row(
+            children: [
+              Text(
+                "Task",
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.normal,
+                  letterSpacing: -1.2,
+                ),
               ),
+              Text(
+                "Manager",
+                style: const TextStyle(
+                  color: Colors.redAccent,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.normal,
+                  letterSpacing: 0,
+                ),
+              )
+            ],
+          ),
+          centerTitle: false,
+          elevation: 0,
+          actions: [
+            Container(
+              margin: const EdgeInsets.all(0),
+              child: IconButton(
+                  icon: Icon(Icons.history_outlined),
+                  iconSize: 25.0,
+                  color: Colors.black,
+                  onPressed: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => HistoryScreen()))),
+            ),
+            Container(
+              margin: const EdgeInsets.all(6.0),
+              child: IconButton(
+                  icon: Icon(Icons.settings_outlined),
+                  iconSize: 25.0,
+                  color: Colors.black,
+                  onPressed: () => Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => Settings()))),
             )
           ],
         ),
-        centerTitle: false,
-        elevation: 0,
-        actions: [
-          Container(
-            margin: const EdgeInsets.all(0),
-            child: IconButton(
-                icon: Icon(Icons.history_outlined),
-                iconSize: 25.0,
-                color: Colors.black,
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => HistoryScreen()))),
-          ),
-          Container(
-            margin: const EdgeInsets.all(6.0),
-            child: IconButton(
-                icon: Icon(Icons.settings_outlined),
-                iconSize: 25.0,
-                color: Colors.black,
-                onPressed: () => Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => Settings()))),
-          )
-        ],
-      ),
-      body: FutureBuilder(
-        future: _taskList,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+        body: FutureBuilder(
+          future: _taskList,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-          final int completedTaskCount = snapshot.data
-              .where((Task task) => task.status == 0)
-              .toList()
-              .length;
+            final int completedTaskCount = snapshot.data
+                .where((Task task) => task.status == 0)
+                .toList()
+                .length;
 
-          return ListView.builder(
-            padding: EdgeInsets.symmetric(vertical: 0.0),
-            itemCount: 1 + snapshot.data.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (index == 0) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: new BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          color: Color.fromRGBO(240, 240, 240, 1.0),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'You have [ $completedTaskCount ] pending task out of [ ${snapshot.data.length} ]',
-                            style: TextStyle(
-                              color: Colors.blueGrey,
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.normal,
+            return ListView.builder(
+              padding: EdgeInsets.symmetric(vertical: 0.0),
+              itemCount: 1 + snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == 0) {
+                  return Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          margin:
+                              const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: new BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: Color.fromRGBO(240, 240, 240, 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'You have [ $completedTaskCount ] pending task out of [ ${snapshot.data.length} ]',
+                              style: TextStyle(
+                                color: Colors.blueGrey,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              }
-              return _buildTask(snapshot.data[index - 1]);
-            },
-          );
-        },
+                        )
+                      ],
+                    ),
+                  );
+                }
+                return _buildTask(snapshot.data[index - 1]);
+              },
+            );
+          },
+        ),
       ),
     );
   }

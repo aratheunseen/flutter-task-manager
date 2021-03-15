@@ -1,10 +1,8 @@
-# task_manager
+# daily-task-manager
 
-This is an applicaton for manage daily task
+This is an applicaton for manage your daily tasks.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
+![daily-task-manager](https://user-images.githubusercontent.com/62181222/111063230-9c4c1900-84d7-11eb-9523-d8c552ee3f56.jpg)
 
 A few resources to get you started if this is your first Flutter project:
 

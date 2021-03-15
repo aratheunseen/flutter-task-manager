@@ -131,8 +131,7 @@ class _SettingsState extends State<Settings> {
                           color: Colors.brown,
                           backgroundColor: Colors.transparent),
                     ),
-                    onTap: () =>
-                        launch('https://https://bornomala-tech.web.app/terms'),
+                    onTap: () => launch('https://bornomala-tech.web.app/terms'),
                   ),
                 ),
               ),
@@ -149,8 +148,8 @@ class _SettingsState extends State<Settings> {
                           color: Colors.brown,
                           backgroundColor: Colors.transparent),
                     ),
-                    onTap: () => launch(
-                        'https://https://bornomala-tech.web.app/privacy'),
+                    onTap: () =>
+                        launch('https://bornomala-tech.web.app/privacy'),
                   ),
                 ),
               ),

@@ -216,6 +216,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(30.0),
                         ),
+                        // ignore: deprecated_member_use
                         child: FlatButton(
                           child: Text(
                             widget.task == null ? 'Add' : 'Update',
@@ -236,6 +237,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                 color: Theme.of(context).primaryColor,
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
+                        // ignore: deprecated_member_use
                               child: FlatButton(
                                 child: Text(
                                   'Delete',

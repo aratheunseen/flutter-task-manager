@@ -23,13 +23,14 @@ showAlertDialog(BuildContext context) async {
     child: Text("OK"),
     onPressed:  () {
       DatabaseHelper.instance.deleteAllTask();
+      Toast.show("All data cleared", context,
+        duration: Toast.LENGTH_LONG,
+        gravity: Toast.BOTTOM);
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (_) => HomeScreen()));
-      Toast.show("All data cleared", context,
-        duration: Toast.LENGTH_LONG,
-        gravity: Toast.BOTTOM);},
+      },
   );
 
   // set up the AlertDialog

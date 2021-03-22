@@ -1,6 +1,6 @@
 # daily-task-manager
 
-This is an applicaton for manage your daily tasks.
+This is an applicaton for manage your daily tasks. [Install this app](https://play.google.com/store/apps/details?id=bornomala.todo) on android.
 
 ![daily-task-manager](https://user-images.githubusercontent.com/62181222/111222593-3f02b580-8606-11eb-89e1-c5c518f5ad96.jpg)
 

@@ -108,11 +108,12 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Color.fromRGBO(250, 250, 250, 1),
           leading: IconButton(
               icon: Icon(
-                Icons.apps,
-                color: Colors.black,
+                Icons.today_outlined,
+                color: Colors.grey,
               ),
               onPressed: null),
-          title: Row(
+          title:
+          Row(
             children: [
               Text(
                 "Task",

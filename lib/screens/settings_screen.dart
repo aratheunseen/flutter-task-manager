@@ -110,7 +110,7 @@ class _SettingsState extends State<Settings> {
                     top: 5.0, left: 25.0, right: 20.0, bottom: 60.0),
                 child: new Container(
                     alignment: Alignment.center,
-                    child: new Text("Version: 2.0.0",
+                    child: new Text("Version: 3.0.0",
                         style:
                             new TextStyle(fontSize: 12.0, color: Colors.grey))),
               ),

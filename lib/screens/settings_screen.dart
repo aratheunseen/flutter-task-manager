@@ -10,6 +10,46 @@ class Settings extends StatefulWidget {
   _SettingsState createState() => _SettingsState();
 }
 
+showAlertDialog(BuildContext context) async {
+
+  // set up the buttons
+  // ignore: deprecated_member_use
+  Widget cancelButton = FlatButton(
+    child: Text("Cancel"),
+    onPressed:  () {Navigator.pop(context);},
+  );
+  // ignore: deprecated_member_use
+  Widget continueButton = FlatButton(
+    child: Text("OK"),
+    onPressed:  () {
+      DatabaseHelper.instance.deleteAllTask();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => HomeScreen()));
+      Toast.show("All data cleared", context,
+        duration: Toast.LENGTH_LONG,
+        gravity: Toast.BOTTOM);},
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    content: Text("Would you like to clear all data? It cannot be undone."),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
@@ -69,7 +109,7 @@ class _SettingsState extends State<Settings> {
                     top: 5.0, left: 25.0, right: 20.0, bottom: 60.0),
                 child: new Container(
                     alignment: Alignment.center,
-                    child: new Text("Version: 1.0",
+                    child: new Text("Version: 2.0.0",
                         style:
                             new TextStyle(fontSize: 12.0, color: Colors.grey))),
               ),
@@ -89,14 +129,7 @@ class _SettingsState extends State<Settings> {
                             top: 30.0, left: 40.0, right: 20.0, bottom: 30.0),
                         child: GestureDetector(
                           onTap: () {
-                            DatabaseHelper.instance.deleteAllTask();
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => HomeScreen()));
-                            Toast.show("All data cleared", context,
-                                duration: Toast.LENGTH_LONG,
-                                gravity: Toast.BOTTOM);
+                            showAlertDialog(context);
                           },
                           child: new Container(
                               alignment: Alignment.center,
@@ -131,7 +164,7 @@ class _SettingsState extends State<Settings> {
                           color: Colors.brown,
                           backgroundColor: Colors.transparent),
                     ),
-                    onTap: () => launch('https://bornomala-tech.web.app/terms'),
+                    onTap: () => launch('https://bornomala-tech.web.app/policies'),
                   ),
                 ),
               ),
@@ -149,7 +182,7 @@ class _SettingsState extends State<Settings> {
                           backgroundColor: Colors.transparent),
                     ),
                     onTap: () =>
-                        launch('https://bornomala-tech.web.app/privacy'),
+                        launch('https://bornomala-tech.web.app/policies'),
                   ),
                 ),
               ),

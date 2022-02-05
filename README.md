@@ -1,10 +1,34 @@
-# daily-task-manager
+# Daily-Task-Manager
 
-This is an applicaton for manage your daily tasks. [Install this app](https://play.google.com/store/apps/details?id=bornomala.todo) on android.
+This is a daily task manager application project created in flutter.
 
+Install this application on Android -
+- [Install from Play Store](https://play.google.com/store/apps/details?id=bornomala.todo)
+
+
+## Getting Started
+
+Step-1: Download or clone this repository -
+
+    git clone https://github.com/aratheunseen/Daily-Task-Manager.git
+
+Step-2: Go to project root and execute the following command in console to get the required dependencies:
+
+    flutter pub get 
+
+## Required Tools
+- Android Studio
+- Visual Studio Code (Optional)
+- Flutter
+- Dart
+
+## Screens' Preview
 ![daily-task-manager](https://user-images.githubusercontent.com/62181222/111222593-3f02b580-8606-11eb-89e1-c5c518f5ad96.jpg)
 
-A few resources to get you started if this is your first Flutter project:
+
+## New to Flutter project!
+
+Follow this -
 
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)

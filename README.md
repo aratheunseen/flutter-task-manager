@@ -3,7 +3,7 @@
 This is a daily task manager application project created in flutter.
 
 Install this application on Android -
-- [Install from Play Store](https://play.google.com/store/apps/details?id=bornomala.todo)
+- [Install from Google Play Store](https://play.google.com/store/apps/details?id=bornomala.todo) or [Get it from GitHub Release](https://github.com/aratheunseen/daily-task-manager/releases/download/android/todo-android.apk)
 
 
 ## Getting Started
